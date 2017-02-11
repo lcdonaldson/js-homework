@@ -56,9 +56,23 @@
                 display.setAttribute("id", "display"); 
                 display.style.cssText = 'position:absolute;margin:10px 2px;width:60%;min-height:200px;max-height:400px;opacity:0.2;z-index:100;background:#000;';
                 document.body.appendChild(display);
+                console.log('what');
 
             };
             window.onload = start;
+            document.getElementsByClassName('add')[0].addEventListener('click', addPerson);
+            // document.getElementsByClassName('submit')[0].addEventListener('click', submit);
+
+            function addPerson(e) {
+                var age = document.getElementsByName('age')[0];
+                var error_age = age.value
+                if(isNaN(error_age)) {
+                    console.log("shoot");
+                }
+
+                e.preventDefault();
+                console.log(age.value);
+            };
             
         </script>
     </body>
