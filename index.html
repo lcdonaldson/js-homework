@@ -65,13 +65,23 @@
 
             function addPerson(e) {
                 var age = document.getElementsByName('age')[0];
-                var error_age = age.value
-                if(isNaN(error_age)) {
-                    console.log("shoot");
+                var age_val = age.value
+                if(isNaN(age_val)) {
+                    console.log("Please use numbers only");
+                } else {
+                    console.log('sure');
+                }
+
+                var rel = document.getElementsByName('rel')[0];
+                var rel_val = rel.value
+                if(rel_val.length < 3) {
+                    console.log('required field');
+                } else {
+                    console.log('');
                 }
 
                 e.preventDefault();
-                console.log(age.value);
+                // console.log(age.value);
             };
             
         </script>
