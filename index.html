@@ -52,32 +52,31 @@
         <script>
             //initialize the DOM, and present list div with id
             function start() {
-                // var display = document.getElementsByTagName('ol')[0];
-                // display.setAttribute("id", "display"); 
-                // display.style.cssText = 'position:absolute;margin:10px 2px;width:60%;min-height:100px;max-height:300px;opacity:0.2;z-index:100;background:#C7C7C7';
-                // document.body.appendChild(display);
-                var age = document.getElementsByName('age')[0];
-                age.setAttribute("placeholder", "Age (required)");
+                var info = document.createElement('div');
+                info.id = 'panel';
+                info.className = 'req_info';
+                document.getElementsByTagName('body')[0].appendChild(info);
+                info.style.cssText = 'position:relative;top:-133px;';
+
+                var required = document.createElement('p');
+                required.style.cssText = 'color:blue';
+
+                var textnode = document.createTextNode('* Fields in blue are required');
+                required.appendChild(textnode);
+                info.appendChild(required);
+                
 
                 var rel_id = document.getElementsByTagName('select')[0];
-                rel_id.options[rel_id.options.length] = new Option(' ', 'first');
+                // rel_id.options[rel_id.options.length] = new Option(' ', 'first');
                 rel_id.setAttribute('id', 'options');
+                rel_id.style.cssText = 'border:1px solid blue;';
 
-                var opt_id = document.getElementsByTagName('option')[0];
-                opt_id.setAttribute('id', 'opt2');
-
-                var parent = document.getElementById('options'); 
-                var child = document.getElementById('opt2');
-                parent.removeChild(child);
-
-                var hoist = document.getElementByValue('first');
-                hoist.insertBefore('')
-
+                var age = document.getElementsByName('age')[0];
+                age.style.cssText = 'border:1px solid blue;';
 
             };
             window.onload = start;
             document.getElementsByClassName('add')[0].addEventListener('click', addPerson);
-            // document.getElementsByClassName('submit')[0].addEventListener('click', submit);
 
             function addPerson(e) {
                 // age field
@@ -96,8 +95,8 @@
                 if(rel_val.length < 3) {
                     console.log('relationship is a required field');
                 };
-                // smoker field
 
+                // smoker field
                 var smoker = document.getElementsByName('smoker')[0];
                 var smoke_val = smoker.value
 
@@ -109,7 +108,6 @@
                 document.getElementsByTagName('body')[0].appendChild(div);
 
                 e.preventDefault();
-                // console.log(age.value);
             };
             
         </script>
