@@ -52,11 +52,27 @@
         <script>
             //initialize the DOM, and present list div with id
             function start() {
-                var display = document.createElement('div');
-                display.setAttribute("id", "display"); 
-                display.style.cssText = 'position:absolute;margin:10px 2px;width:60%;min-height:200px;max-height:400px;opacity:0.2;z-index:100;background:#000;';
-                document.body.appendChild(display);
-                console.log('what');
+                // var display = document.getElementsByTagName('ol')[0];
+                // display.setAttribute("id", "display"); 
+                // display.style.cssText = 'position:absolute;margin:10px 2px;width:60%;min-height:100px;max-height:300px;opacity:0.2;z-index:100;background:#C7C7C7';
+                // document.body.appendChild(display);
+                var age = document.getElementsByName('age')[0];
+                age.setAttribute("placeholder", "Age (required)");
+
+                var rel_id = document.getElementsByTagName('select')[0];
+                rel_id.options[rel_id.options.length] = new Option(' ', 'first');
+                rel_id.setAttribute('id', 'options');
+
+                var opt_id = document.getElementsByTagName('option')[0];
+                opt_id.setAttribute('id', 'opt2');
+
+                var parent = document.getElementById('options'); 
+                var child = document.getElementById('opt2');
+                parent.removeChild(child);
+
+                var hoist = document.getElementByValue('first');
+                hoist.insertBefore('')
+
 
             };
             window.onload = start;
@@ -64,21 +80,33 @@
             // document.getElementsByClassName('submit')[0].addEventListener('click', submit);
 
             function addPerson(e) {
+                // age field
                 var age = document.getElementsByName('age')[0];
+
                 var age_val = age.value
                 if(isNaN(age_val)) {
                     console.log("Please use numbers only");
-                } else {
-                    console.log('sure');
-                }
+                } else if (age_val.length == 0) {
+                    console.log('age is a required field');
+                }; 
 
+                // relationship field
                 var rel = document.getElementsByName('rel')[0];
                 var rel_val = rel.value
                 if(rel_val.length < 3) {
-                    console.log('required field');
-                } else {
-                    console.log('');
-                }
+                    console.log('relationship is a required field');
+                };
+                // smoker field
+
+                var smoker = document.getElementsByName('smoker')[0];
+                var smoke_val = smoker.value
+
+                person = age_val + " " + rel_val + " " + smoke_val;
+
+                var div = document.getElementsByTagName("ol")[0];
+                div.style.cssText = 'position:absolute;margin:10px 2px;width:60%;min-height:100px;max-height:300px;z-index:100;background-color:#C7C7C7;color:#666;';
+                div.innerHTML = "<ul><li>" + person + "</li></ul>";
+                document.getElementsByTagName('body')[0].appendChild(div);
 
                 e.preventDefault();
                 // console.log(age.value);
