@@ -12,6 +12,7 @@
             }
         </style>
     </head>
+
     <body>
         <h1>Household builder</h1>
         <div class="builder">
@@ -50,65 +51,114 @@
         </div>
         <pre class="debug"></pre>
         <script>
-            //initialize the DOM, and present list div with id
+            //initialize the DOM, and have default UI created
             function start() {
+
+            // required fields info
                 var info = document.createElement('div');
                 info.id = 'panel';
                 info.className = 'req_info';
+
                 document.getElementsByTagName('body')[0].appendChild(info);
-                info.style.cssText = 'position:relative;top:-133px;';
+                info.style.cssText = 'margin:5px 0;';
 
                 var required = document.createElement('p');
-                required.style.cssText = 'color:blue';
-
+                required.style.cssText = 'color:blue;';
+                
                 var textnode = document.createTextNode('* Fields in blue are required');
                 required.appendChild(textnode);
                 info.appendChild(required);
-                
 
-                var rel_id = document.getElementsByTagName('select')[0];
-                // rel_id.options[rel_id.options.length] = new Option(' ', 'first');
-                rel_id.setAttribute('id', 'options');
-                rel_id.style.cssText = 'border:1px solid blue;';
-
+            // age field
                 var age = document.getElementsByName('age')[0];
-                age.style.cssText = 'border:1px solid blue;';
+                age.style.cssText = 'border:1px solid blue;margin:5px;';
+
+            // relationship field
+                var rel_id = document.getElementsByTagName('select')[0];
+                rel_id.setAttribute('id', 'options');
+                rel_id.style.cssText = 'border:1px solid blue;margin:5px;';
+
+            // smoker field
+                var smoker = document.getElementsByTagName('input')[1];
+                smoker.setAttribute('id', 'smoker');
+                smoker.type = "checkbox";
+                smoker.value = "yes";
+
+            // create div panel to append list itmes    
+                var div = document.getElementsByTagName("ol")[0];
+                div.setAttribute('id', 'list');
+                div.style.cssText = 'position:absolute;padding:10px;margin:10px 2px;width:50%;min-height:50px;max-height:80px;z-index:100;background-color:#C7C7C7;color:#666;';
+                document.getElementsByTagName('body')[0].appendChild(div);
+                var helptext = document.createTextNode('Your input will be displayed here');
+                div.appendChild(helptext);
+
+                var visible = document.getElementsByTagName("pre")[0];
+                visible.style.cssText = "display:block;position:relative;top:120px;right:0;";
+                document.getElementById('list').after(visible);
 
             };
             window.onload = start;
+
             document.getElementsByClassName('add')[0].addEventListener('click', addPerson);
 
             function addPerson(e) {
-                // age field
+            
+            // age field - grab value and validate
                 var age = document.getElementsByName('age')[0];
-
                 var age_val = age.value
                 if(isNaN(age_val)) {
-                    console.log("Please use numbers only");
+                    alert("Please use numbers only");
+                    return false
                 } else if (age_val.length == 0) {
-                    console.log('age is a required field');
+                    // alert("age is a required field");
+                    // return false
                 }; 
-
-                // relationship field
+                    
+            // relationship field - grab value and validate
                 var rel = document.getElementsByName('rel')[0];
                 var rel_val = rel.value
                 if(rel_val.length < 3) {
-                    console.log('relationship is a required field');
+                    // alert('relationship is a required field');
+                    // return false
                 };
 
-                // smoker field
-                var smoker = document.getElementsByName('smoker')[0];
-                var smoke_val = smoker.value
+            // smoker field - grab value and validate
+                var smoker = document.getElementById('smoker');
+                var smoke_check = smoker.checked;
+                var smoke_val = smoker.value;
 
-                person = age_val + " " + rel_val + " " + smoke_val;
+                if (smoke_check === true) {
+                    smoke_val = "smoker";
+                } else {
+                    smoke_val = "non smoker";
+                };
 
-                var div = document.getElementsByTagName("ol")[0];
-                div.style.cssText = 'position:absolute;margin:10px 2px;width:60%;min-height:100px;max-height:300px;z-index:100;background-color:#C7C7C7;color:#666;';
-                div.innerHTML = "<ul><li>" + person + "</li></ul>";
-                document.getElementsByTagName('body')[0].appendChild(div);
+            // remove button    
+                var removeBtn = document.createElement("BUTTON");
+                removeBtn.className = "removeMe";
+                removeBtn.innerHTML = 'Remove';
+                removeBtn.setAttribute('onclick', 'removeMe(this);');
+                removeBtn.style.cssText = 'margin-top:5px;padding:1px;background-color:#EAEAEA;border:1px solid transparent;';
+            
+            // person details  
+                var person = "Age: " + age_val + ", " + "<br>" + " " + "Relationship: " + rel_val + ", " + "<br>" + " " + smoke_val + "<br>";
+                document.getElementById('list').innerHTML = "<ul><li style='list-style-type:none;padding:5px 0;'>" + person + "</li></ul>";
+                document.getElementsByTagName('li')[0].appendChild(removeBtn);
 
                 e.preventDefault();
             };
+
+            function removeMe(item) {
+                var parent = item.parentElement;
+                parent.parentElement.removeChild(parent);
+            };
+
+            document.getElementsByTagName('button')[1].addEventListener('click', serialize);
+
+            function serialize(e) {
+                console.log("what's up");
+                e.preventDefault();
+            }
             
         </script>
     </body>
