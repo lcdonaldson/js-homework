@@ -51,10 +51,16 @@
         </div>
         <pre class="debug"></pre>
         <script>
-            //initialize the DOM, and have default UI created
             function start() {
+                //initialize the DOM, and have default UI created
+                requiredFields();
+                formInfo();
+                pagePanel();
+            };
+            window.onload = start;
 
-            // required fields info
+            function requiredFields() {
+                // required fields info
                 var info = document.createElement('div');
                 info.id = 'panel';
                 info.className = 'req_info';
@@ -68,58 +74,57 @@
                 var textnode = document.createTextNode('* Fields in blue are required');
                 required.appendChild(textnode);
                 info.appendChild(required);
+            };
 
-            // age field
+            function formInfo() {
+                // age field
                 var age = document.getElementsByName('age')[0];
                 age.style.cssText = 'border:1px solid blue;margin:5px;';
 
-            // relationship field
+                // relationship field
                 var rel_id = document.getElementsByTagName('select')[0];
                 rel_id.setAttribute('id', 'options');
                 rel_id.style.cssText = 'border:1px solid blue;margin:5px;';
 
-            // smoker field
+                // smoker field
                 var smoker = document.getElementsByTagName('input')[1];
                 smoker.setAttribute('id', 'smoker');
                 smoker.type = "checkbox";
-                smoker.value = "yes";
+            };
 
-            // create div panel to append list itmes    
+            function pagePanel() {
+                // create div panel to append list itmes    
                 var div = document.getElementsByTagName("ol")[0];
                 div.setAttribute('id', 'list');
-                div.style.cssText = 'position:absolute;padding:10px;margin:10px 2px;width:50%;min-height:50px;max-height:80px;z-index:100;background-color:#C7C7C7;color:#666;';
+                div.style.cssText = 'position:absolute;padding:10px;margin:10px 2px;width:220px;min-height:50px;max-height:90px;z-index:100;background-color:#C7C7C7;color:#666;';
                 document.getElementsByTagName('body')[0].appendChild(div);
                 var helptext = document.createTextNode('Your input will be displayed here');
                 div.appendChild(helptext);
-
-                var visible = document.getElementsByTagName("pre")[0];
-                visible.style.cssText = "display:block;position:relative;top:120px;right:0;";
-                document.getElementById('list').after(visible);
-
             };
-            window.onload = start;
 
             document.getElementsByClassName('add')[0].addEventListener('click', addPerson);
 
-            function addPerson(e) {
+            function addPerson(e) {    
             
             // age field - grab value and validate
                 var age = document.getElementsByName('age')[0];
                 var age_val = age.value
+
                 if(isNaN(age_val)) {
                     alert("Please use numbers only");
                     return false
                 } else if (age_val.length == 0) {
-                    // alert("age is a required field");
-                    // return false
+                    alert("age is a required field");
+                    return false
                 }; 
                     
             // relationship field - grab value and validate
                 var rel = document.getElementsByName('rel')[0];
                 var rel_val = rel.value
+
                 if(rel_val.length < 3) {
-                    // alert('relationship is a required field');
-                    // return false
+                    alert('relationship is a required field');
+                    return false
                 };
 
             // smoker field - grab value and validate
@@ -128,9 +133,9 @@
                 var smoke_val = smoker.value;
 
                 if (smoke_check === true) {
-                    smoke_val = "smoker";
+                    smoke_val = "yes";
                 } else {
-                    smoke_val = "non smoker";
+                    smoke_val = "no";
                 };
 
             // remove button    
@@ -141,25 +146,64 @@
                 removeBtn.style.cssText = 'margin-top:5px;padding:1px;background-color:#EAEAEA;border:1px solid transparent;';
             
             // person details  
-                var person = "Age: " + age_val + ", " + "<br>" + " " + "Relationship: " + rel_val + ", " + "<br>" + " " + smoke_val + "<br>";
-                document.getElementById('list').innerHTML = "<ul><li style='list-style-type:none;padding:5px 0;'>" + person + "</li></ul>";
-                document.getElementsByTagName('li')[0].appendChild(removeBtn);
+                var person = "Age: " + age_val + ", " + "<br>" + " " + "Relationship: " + rel_val + ", " + "<br>" + " " + "Smoker: " + smoke_val + "<br>";
+                document.getElementById('list').innerHTML = "<ul style='padding-left:15px;'><li data-info='person' style='list-style-type:none;padding:5px 0;'>" + person + "</li></ul>";
+                document.getElementsByTagName('ul')[0].appendChild(removeBtn);
 
                 e.preventDefault();
             };
 
+            // Remove personal information
             function removeMe(item) {
                 var parent = item.parentElement;
                 parent.parentElement.removeChild(parent);
             };
-
-            document.getElementsByTagName('button')[1].addEventListener('click', serialize);
-
-            function serialize(e) {
-                console.log("what's up");
-                e.preventDefault();
-            }
             
+            function toJSONString(form) {
+                var obj = {};
+                var elements = form.querySelectorAll("input, select, checkbox");
+                var checked = elements[2].checked;
+
+                for(var i = 0; i < elements.length; ++i) {
+                    var element = elements[i];
+                    var name = element.name;
+                    var value = element.value;
+
+                    if(name) {
+                        obj[name] = value;
+                    }
+                }
+
+                if(checked) {
+                    obj[name] = elements[2].value = "yes";
+                } else {
+                    obj[name] = elements[2].value = "no";
+                }
+
+                return JSON.stringify(obj);
+            };
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var form = document.getElementsByTagName("form")[0];
+                var output = document.getElementsByClassName("debug")[0];
+
+                form.addEventListener("submit", function(e) {
+                    e.preventDefault();
+
+                    if("list") {
+                        alert("Please add a person before submitting.");
+                        return false
+                    }
+
+                    var json = toJSONString(this);
+                    output.innerHTML = json;
+                    output.style.cssText = "display:block;position:relative;top:120px;right:0;width:360px;";
+                    document.getElementById('list').after(output);
+
+                }, false);
+
+            });
+
         </script>
     </body>
 </html>
