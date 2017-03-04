@@ -98,14 +98,15 @@
                 div.setAttribute('id', 'list');
                 div.style.cssText = 'position:absolute;padding:10px;margin:10px 2px;width:220px;min-height:50px;max-height:90px;z-index:100;background-color:#C7C7C7;color:#666;';
                 document.getElementsByTagName('body')[0].appendChild(div);
-                var helptext = document.createTextNode('Your input will be displayed here');
+                var helptext = document.createTextNode('Added person is displayed here');
                 div.appendChild(helptext);
             };
 
             document.getElementsByClassName('add')[0].addEventListener('click', addPerson);
 
-            function addPerson(e) {    
-            
+            function addPerson(e) { 
+
+                e.preventDefault();
             // age field - grab value and validate
                 var age = document.getElementsByName('age')[0];
                 var age_val = age.value
@@ -150,15 +151,22 @@
                 document.getElementById('list').innerHTML = "<ul style='padding-left:15px;'><li data-info='person' style='list-style-type:none;padding:5px 0;'>" + person + "</li></ul>";
                 document.getElementsByTagName('ul')[0].appendChild(removeBtn);
 
-                e.preventDefault();
             };
 
-            // Remove personal information
+            // Remove personal information and reset 
             function removeMe(item) {
                 var parent = item.parentElement;
                 parent.parentElement.removeChild(parent);
+
+                var data = document.getElementsByClassName("debug")[0];
+                data.style.cssText = "display: none;";
+
+                var div = document.getElementsByTagName("ol")[0];
+                var helptext = document.createTextNode('Added person is displayed here');
+                div.appendChild(helptext);
             };
             
+            // Serialize data
             function toJSONString(form) {
                 var obj = {};
                 var elements = form.querySelectorAll("input, select, checkbox");
@@ -183,6 +191,7 @@
                 return JSON.stringify(obj);
             };
 
+            // Submit event listener
             document.addEventListener("DOMContentLoaded", function() {
                 var form = document.getElementsByTagName("form")[0];
                 var output = document.getElementsByClassName("debug")[0];
@@ -190,14 +199,17 @@
                 form.addEventListener("submit", function(e) {
                     e.preventDefault();
 
-                    if("list") {
+                    var elements = form.querySelectorAll("input, select, checkbox");
+                    console.log(elements[0].value);
+
+                    if(elements[0].value == "" || elements[1].value == "") {
                         alert("Please add a person before submitting.");
                         return false
                     }
-
+                    
                     var json = toJSONString(this);
                     output.innerHTML = json;
-                    output.style.cssText = "display:block;position:relative;top:120px;right:0;width:360px;";
+                    output.style.cssText = "display:block;position:relative;top:130px;right:0;width:360px;";
                     document.getElementById('list').after(output);
 
                 }, false);
