@@ -6,3 +6,15 @@ function reverseString(exstr) {
     return exstr.split("").reverse().join("");
 }
 reverseString("hey guys this reversed");
+
+
+# Now with recursion. This is more functional but slower in this case.
+
+function reverseString(exstr) {
+  if (exstr === "")
+    return "";
+  
+  else
+    return reverseString(exstr.substr(1)) + exstr.charAt(0);
+}
+reverseString("hello");
