@@ -18,3 +18,28 @@ function reverseString(exstr) {
     return reverseString(exstr.substr(1)) + exstr.charAt(0);
 }
 reverseString("hello");
+
+
+#2 return a palindrome (this is when a word is spelled the same way even in reverse (ex. AVA)
+
+// not a palindrome
+function pal(str){	
+	const rev = str.split('').reverse().join('');
+	return rev;
+}
+
+pal('this is not a palindrome');
+
+
+// this returns a true value for a palindrome 
+function pal(str){	
+	var a = str;
+	const rev = str.split('').reverse().join('');
+	if(rev === a){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+pal('abba');
